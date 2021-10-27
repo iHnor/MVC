@@ -11,24 +11,23 @@ namespace todo_rest_api.Controllers
     [ApiController]
     public class TodoItemController : ControllerBase
     {
-        static private List<TodoItem> todoItems = new List<TodoItem> {
-        new TodoItem() { Id = 1, Title = "Implement read" },
-        new TodoItem() { Id = 2, Title = "Implement create" }
-    };
-        static private int lastId = 2;
+        private TodoItemService todoItemsService;
+        public TodoItemController(TodoItemService service)
+        {
+            this.todoItemsService = service;
+        }
 
         [HttpGet("")]
         public ActionResult<IEnumerable<TodoItem>> GetTodoItems()
         {
-            return todoItems;
+            return todoItemsService.GetAll();
         }
 
         [HttpPost("")]
         public ActionResult<TodoItem> CreateTodoItem(TodoItem todoItem)
         {
-            todoItem.Id = ++lastId;
-            todoItems.Add(todoItem);
-            return Created($"api/todoitem/{todoItem.Id}", todoItem);
+            TodoItem createdItem = todoItemsService.Create(todoItem);
+            return Created($"api/todoitem/{createdItem.Id}", createdItem);
         }
     }
 }
