@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 
 namespace todo_rest_api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("task")]
     [ApiController]
     public class TodoItemController : ControllerBase
     {
@@ -17,17 +17,39 @@ namespace todo_rest_api.Controllers
             this.todoItemsService = service;
         }
 
-        [HttpGet("")]
+        [HttpGet]
         public ActionResult<IEnumerable<TodoItem>> GetTodoItems()
         {
             return todoItemsService.GetAll();
         }
 
-        [HttpPost("")]
-        public ActionResult<TodoItem> CreateTodoItem(TodoItem todoItem)
+        [HttpGet("{id}")]
+        public ActionResult<TodoItem> GetTodoItem(int id)
         {
-            TodoItem createdItem = todoItemsService.Create(todoItem);
-            return Created($"api/todoitem/{createdItem.Id}", createdItem);
+            return todoItemsService.GetById(id);
         }
+
+        [HttpPost]
+        public ActionResult<TodoItem> CreateTodoItem(TodoItem task)
+        {
+            TodoItem createdItem = todoItemsService.Create(task);
+            return Created($"task{createdItem.Id}", createdItem);
+        }
+
+        [HttpPut("{id}")]
+        public ActionResult<IEnumerable<TodoItem>> PutTodoTask(int id, TodoItem task)
+        {
+            return todoItemsService.PutTask(id, task);
+        }
+
+        [HttpDelete("{id}")]
+        public ActionResult DeleteTodoTask(int id)
+        {
+            return todoItemsService.Delete(id) ? StatusCode(204) : StatusCode(404);
+        }
+
+        // [Http]
+        // [HttpPat]
+        // [HttpPatch("{id1}/tmp/{id2}")]
     }
 }
