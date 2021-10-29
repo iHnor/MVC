@@ -18,44 +18,40 @@ namespace todo_rest_api.Controllers.List
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<TodoItem>> GetTodoItems()
+        public ActionResult<IEnumerable<TodoList>> GetTodoList()
         {
-            return todoItemsService.GetAll();
+            return todoItemsService.GetAllLists();
         }
 
         [HttpGet("{id}")]
-        public ActionResult<TodoItem> GetTodoItem(int id)
+        public ActionResult<TodoList> GetTodoList(int id)
         {
-            return todoItemsService.GetById(id);
+            return todoItemsService.GetListById(id);
         }
 
         [HttpPost]
-        public ActionResult<TodoItem> CreateTodoItem(TodoItem task)
+        public ActionResult<TodoList> CreateTodoList(TodoList list)
         {
-            TodoItem createdItem = todoItemsService.Create(task);
+            TodoList createdItem = todoItemsService.CreateList(list);
             return Created($"task{createdItem.Id}", createdItem);
         }
 
         [HttpPut("{id}")]
-        public ActionResult PutTodoTask(int id, TodoItem task)
+        public ActionResult PutTodoList(int id, TodoList list)
         {
-            return todoItemsService.PutTask(id, task) ? StatusCode(204) : StatusCode(404);
+            return todoItemsService.PutList(id, list) ? StatusCode(204) : StatusCode(404);
         }
 
         [HttpPatch("{id}")]
-        public ActionResult PatchTodoTask(int id, TodoItem task)
+        public ActionResult PatchTodoList(int id, TodoList list)
         {
-            return todoItemsService.PatchTask(id, task) ? StatusCode(204) : StatusCode(404);
+            return todoItemsService.PatchList(id, list) ? StatusCode(204) : StatusCode(404);
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteTodoTask(int id)
+        public ActionResult DeleteTodoList(int id)
         {
-            return todoItemsService.Delete(id) ? StatusCode(204) : StatusCode(404);
+            return todoItemsService.DeleteTodoList(id) ? StatusCode(204) : StatusCode(404);
         }
-
-        // [Http]
-        // [HttpPat]
-        // [HttpPatch("{id1}/tmp/{id2}")]
     }
 }
