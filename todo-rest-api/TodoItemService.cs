@@ -13,7 +13,7 @@ namespace todo_rest_api
             new TodoList() {Id = 1, Title = "First list"},
             new TodoList() {Id = 2, Title = "Second list"}
         };
-        private int lastIdTask = 2;
+        private int lastIdTask = 0;
         private int lastIdList = 2;
 
 
@@ -78,59 +78,95 @@ namespace todo_rest_api
                 return false;
             }
         }
-        // public TodoItem GetTaskById(int listId, int id)
-        // {
-        //     return todoLists[listId].List[id];
-        // }
-        //     public TodoItem Create(TodoItem item)
-        //     {
-        //         item.Id = ++lastId;
-        //         todoItems.Add(item);
-        //         return item;
-        //     }
-        //     public bool Delete(int index)
-        //     {
-        //         try
-        //         {
-        //             todoItems.RemoveAt(index);
-        //             return true;
-        //         }
-        //         catch
-        //         {
-        //             return false;
-        //         }
-        //     }
 
-        //     public bool PutTask(int id, TodoItem task)
-        //     {
-        //         foreach (var t in todoItems)
-        //         {
-        //             if (t.Id == id)
-        //             {
-        //                 t.Title = task.Title;
-        //                 t.Description = task.Description;
-        //                 t.DueDate = task.DueDate;
-        //                 t.Done = task.Done;
-        //                 return true;
-        //             }
-        //         }
-        //         return false;
+        public List<TodoItem> GetAllTaskInList(int listId)
+        {
+            return todoLists[listId].List;
+        }
+        public TodoItem GetListById(int listId, int id)
+        {
+            return todoLists[listId].List[id];
+        }
+        public TodoItem CreateTaskInList(int listId, TodoItem list)
+        {
+            list.Id = ++lastIdTask;
+            todoLists[listId].List.Add(list);
+            return list;
+        }
+        public bool PutTaskInList(int listId, int id, TodoItem task)
+        {
+            foreach (var t in todoLists[listId].List)
+            {
+                if (t.Id == id)
+                {
+                    t.Title = task.Title;
+                    t.Description = task.Description;
+                    t.DueDate = task.DueDate;
+                    t.Done = task.Done;
+                    return true;
+                }
+            }
+            return false;
 
-        //     }
-        //     public bool PatchTask(int id, TodoItem task)
-        //     {
-        //         foreach (var t in todoItems)
-        //         {
-        //             if (t.Id == id)
-        //             {
-        //                 t.Title = task?.Title;
-        //                 t.Description = task?.Description;
-        //                 t.DueDate = task?.DueDate;
-        //                 t.Done = task?.Done;
-        //                 return true;
-        //             }
-        //         }
-        //         return false;
-        //     }
+        }
+
+        public bool PatchTaskInList(int listId, int id, TodoItem task)
+        {
+            foreach (var t in todoLists[listId].List)
+            {
+                if (t.Id == id)
+                {
+                    t.Title = task?.Title;
+                    t.Description = task?.Description;
+                    t.DueDate = task?.DueDate;
+                    t.Done = task?.Done;
+                    return true;
+                }
+            }
+            return false;
+        }
+        public bool DeleteTask(int listId, int id)
+        {
+            try
+            {
+                todoLists[listId].List.RemoveAt(id);
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+        }
     }
+
+
+    // public TodoItem GetTaskById(int listId, int id)
+    // {
+    //     return todoLists[listId].List[id];
+    // }
+    //     public TodoItem Create(TodoItem item)
+    //     {
+    //         item.Id = ++lastId;
+    //         todoItems.Add(item);
+    //         return item;
+    //     }
+    //     
+    //     public bool PutTask(int id, TodoItem task)
+    //     {
+    //         foreach (var t in todoItems)
+    //         {
+    //             if (t.Id == id)
+    //             {
+    //                 t.Title = task.Title;
+    //                 t.Description = task.Description;
+    //                 t.DueDate = task.DueDate;
+    //                 t.Done = task.Done;
+    //                 return true;
+    //             }
+    //         }
+    //         return false;
+
+    //     }
+    //
+
 }
