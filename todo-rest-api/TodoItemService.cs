@@ -37,10 +37,36 @@ namespace todo_rest_api
             }
         }
 
-        public List<TodoItem> PutTask(int index,TodoItem task)
+        public bool PutTask(int id, TodoItem task)
         {
-            todoItems.Insert(index, task);
-            return GetAll();
+            foreach (var t in todoItems)
+            {
+                if (t.Id == id)
+                {
+                    t.Title = task.Title;
+                    t.Description = task.Description;
+                    t.DueDate = task.DueDate;
+                    t.Done = task.Done;
+                    return true;
+                }
+            }
+            return false;
+
+        }
+        public bool PatchTask(int id, TodoItem task)
+        {
+            foreach (var t in todoItems)
+            {
+                if(t.Id == id)
+                {
+                    t.Title = task?.Title;
+                    t.Description = task?.Description;
+                    t.DueDate = task?.DueDate;
+                    t.Done = task?.Done;
+                    return true;
+                }
+            }
+            return false;
         }
     }
 }

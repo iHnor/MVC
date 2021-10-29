@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
-namespace todo_rest_api.Controllers
+namespace todo_rest_api.Controllers.Task
 {
     [Route("task")]
+    // [Route("list/{listId}/task")]
+
     [ApiController]
     public class TodoItemController : ControllerBase
     {
@@ -37,9 +39,15 @@ namespace todo_rest_api.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<IEnumerable<TodoItem>> PutTodoTask(int id, TodoItem task)
+        public ActionResult PutTodoTask(int id, TodoItem task)
         {
-            return todoItemsService.PutTask(id, task);
+            return todoItemsService.PutTask(id, task) ? StatusCode(204) : StatusCode(404);
+        }
+
+        [HttpPatch("{id}")]
+        public ActionResult PatchTodoTask(int id, TodoItem task)
+        {
+            return todoItemsService.PatchTask(id, task) ? StatusCode(204) : StatusCode(404);
         }
 
         [HttpDelete("{id}")]
