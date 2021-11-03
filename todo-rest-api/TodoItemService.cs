@@ -5,10 +5,7 @@ namespace todo_rest_api
 {
     public class TodoItemService
     {
-        //     private List<TodoItem> todoItems = new List<TodoItem> {
-        //         new TodoItem() { Id = 1, Title = "Implement read", Description = "Some description", DueDate = DateTime.Now, Done = false},
-        //         new TodoItem() { Id = 2, Title = "Implement create" }
-        //     };
+        
         private List<TodoList> todoLists = new List<TodoList> {
             new TodoList() {Id = 1, Title = "First list"},
             new TodoList() {Id = 2, Title = "Second list"}
@@ -138,35 +135,4 @@ namespace todo_rest_api
             }
         }
     }
-
-
-    // public TodoItem GetTaskById(int listId, int id)
-    // {
-    //     return todoLists[listId].List[id];
-    // }
-    //     public TodoItem Create(TodoItem item)
-    //     {
-    //         item.Id = ++lastId;
-    //         todoItems.Add(item);
-    //         return item;
-    //     }
-    //     
-    //     public bool PutTask(int id, TodoItem task)
-    //     {
-    //         foreach (var t in todoItems)
-    //         {
-    //             if (t.Id == id)
-    //             {
-    //                 t.Title = task.Title;
-    //                 t.Description = task.Description;
-    //                 t.DueDate = task.DueDate;
-    //                 t.Done = task.Done;
-    //                 return true;
-    //             }
-    //         }
-    //         return false;
-
-    //     }
-    //
-
 }

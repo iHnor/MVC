@@ -1,19 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
-namespace todo_rest_api.Controllers.Tasks
+namespace todo_rest_api
 {
     [Route("task")]
 
     [ApiController]
-    public class TodoItemController : ControllerBase
+    public class TaskController : ControllerBase
     {
         private TodoItemService todoItemsService;
-        public TodoItemController(TodoItemService service)
+        public TaskController(TodoItemService service)
         {
             this.todoItemsService = service;
         }
