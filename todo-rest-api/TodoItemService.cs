@@ -1,3 +1,6 @@
+using System.Linq;
+using System.Collections.Generic;
+
 namespace todo_rest_api
 {
     public class TodoItemService
@@ -7,11 +10,54 @@ namespace todo_rest_api
         {
             this._context = context;
         }
-        public void CreateList(TodoList list){
+
+        public List<TodoTask> GetTasksInList(int listId)
+        {
+            List<TodoTask> tasks = new List<TodoTask>();
+            foreach (var task in _context.TodoTasks)
+            {
+                if (task.ListId == listId)
+                {
+                    tasks.Add(task);
+                }
+            }
+            return tasks;
+        }
+        public void CreateList(TodoList list)
+        {
             _context.TodoLists.Add(list);
             _context.SaveChanges();
         }
-        
+
+        public void DeleteList(int id)
+        {
+            var searchElem = _context.TodoLists.SingleOrDefault(i => i.Id == id);
+            if (searchElem != null)
+            {
+                _context.TodoLists.Remove(searchElem);
+                _context.SaveChanges();
+            }
+        }
+
+        public void CreateTask(int listId, TodoTask task)
+        {
+            task.ListId = listId;
+            _context.TodoTasks.Add(task);
+            _context.SaveChanges();
+        }
+        public void DeleteTask(int id)
+        {
+            var searchElem = _context.TodoTasks.SingleOrDefault(i => i.Id == id);
+            if (searchElem != null)
+            {
+                _context.TodoTasks.Remove(searchElem);
+                _context.SaveChanges();
+            }
+        }
+        public TodoTask GetTask(int id)
+        {
+            return _context.TodoTasks.Single(i => i.Id == id);
+        }
         // private List<TodoList> todoLists = new List<TodoList> {
         //     new TodoList() {Id = 1, Title = "First list"},
         //     new TodoList() {Id = 2, Title = "Second list"}

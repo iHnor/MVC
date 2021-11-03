@@ -1,37 +1,50 @@
-﻿// using System.Collections.Generic;
-// using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 
-// namespace todo_rest_api
-// {
-//     [Route("task")]
+namespace todo_rest_api
+{
+    [Route("task")]
+    [ApiController]
+    public class TaskController : ControllerBase
+    {
+        private TodoItemService todoItemsService;
+        public TaskController(TodoItemService service)
+        {
+            this.todoItemsService = service;
+        }
 
-//     [ApiController]
-//     public class TaskController : ControllerBase
-//     {
-//         private TodoItemService todoItemsService;
-//         public TaskController(TodoItemService service)
-//         {
-//             this.todoItemsService = service;
-//         }
+        [HttpPost]
+        public IActionResult CreateTask(int listId, TodoTask task)
+        {
+            todoItemsService.CreateTask(listId, task);
+            return Ok();
+        }
 
-//         // [HttpGet]
-//         // public ActionResult<IEnumerable<TodoItem>> GetTodoItems(int listId)
-//         // {
-//         //     return todoItemsService.GetAllTaskInList(listId);
-//         // }
-
+        [HttpDelete("{id}")] 
+        public IActionResult DeleteTask(int id)
+        {
+            todoItemsService.DeleteTask(id);
+            return Ok();
+        }  
+        [HttpGet("{id}")]
+        public ActionResult<TodoTask> GetTask(int id)
+        {
+            return todoItemsService.GetTask(id);
+        }
+    }
+}
+ // [HttpGet]
+        // public IActionResult GetTodoTask(int listId)
+        // {
+        //     return todoItemsService.GetTodoTask(listId);
+        // }
 //         // [HttpGet("{id}")]
 //         // public ActionResult<TodoItem> GetTodoItem(int listId, int id)
 //         // {
 //         //     return todoItemsService.GetListById(listId, id);
 //         // }
 
-//         // [HttpPost]
-//         // public ActionResult<TodoItem> CreateTodoItem(int listId, TodoItem task)
-//         // {
-//         //     TodoItem createdItem = todoItemsService.CreateTaskInList(listId, task);
-//         //     return Created($"task{createdItem.Id}", createdItem);
-//         // }
+//         
 
 //         // [HttpPut("{id}")]
 //         // public ActionResult PutTodoTask(int listId, int id, TodoItem task)
