@@ -1,10 +1,16 @@
-using System;
-using System.Collections.Generic;
-
 namespace todo_rest_api
 {
     public class TodoItemService
     {
+        private TodoListContext _context;
+        public TodoItemService(TodoListContext context)
+        {
+            this._context = context;
+        }
+        public void CreateList(TodoList list){
+            _context.TodoLists.Add(list);
+            _context.SaveChanges();
+        }
         
         // private List<TodoList> todoLists = new List<TodoList> {
         //     new TodoList() {Id = 1, Title = "First list"},

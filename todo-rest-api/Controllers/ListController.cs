@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
 namespace todo_rest_api
@@ -11,6 +10,13 @@ namespace todo_rest_api
         public ListController(TodoItemService service)
         {
             this.todoItemsService = service;
+        }
+
+        [HttpPost]
+        public IActionResult CreateList(TodoList list)
+        {
+            todoItemsService.CreateList(list);
+            return Ok();
         }
 
         // [HttpGet]

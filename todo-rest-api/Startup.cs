@@ -29,7 +29,7 @@ namespace todo_rest_api
         {
 
             services.AddControllers();
-            services.AddSingleton<TodoItemService>();
+            services.AddScoped<TodoItemService>();
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "get_post_action_task", Version = "v1" });

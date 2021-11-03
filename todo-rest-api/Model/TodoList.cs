@@ -7,13 +7,8 @@ namespace todo_rest_api
     {
         public int Id { get; set; }
         public string Title { get; set; }
-        public List<TodoItem> List { get; set; }
-    
-        public TodoList()
-        {
-            List = new List<TodoItem>();
-        }
+        public List<TodoTask> TodoTasks { get; set; }
+
+
     }
-
-
 }
