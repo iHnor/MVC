@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace todo_rest_api
 {
@@ -33,7 +34,11 @@ namespace todo_rest_api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "get_post_action_task", Version = "v1" });
             });
-
+            services.AddScoped<TodoItemService>();
+            services.AddDbContext<TodoListContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection"))
+                .UseSnakeCaseNamingConvention()
+            );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
