@@ -1,7 +1,8 @@
+using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Linq;
-using System;
+using Microsoft.EntityFrameworkCore;
+
 namespace todo_rest_api
 {
     public class TodoItemService
@@ -61,139 +62,33 @@ namespace todo_rest_api
 
         public DashboardDTO Dashboard()
         {
-            DashboardDTO dashboard = new DashboardDTO();
-            dashboard.todayTasks = _context.TodoTasks
+            var count = _context.TodoTasks
                 .Where(d => (DateTime.Today <= d.Duedate) && (d.Duedate < DateTime.Today.AddDays(1)))
                 .Count();
-            return  dashboard;
+
+            var listResult = _context.TodoLists
+                .Include(l => l.TodoTasks)
+                .Select(l => new TaskDTO(){
+                    id = l.Id,
+                    title = l.Title,
+                    countUndoneTasks = l.TodoTasks
+                        .Where(t => t.Done.Equals(false)).Count()
+
+                })
+                .OrderBy(l => l.id)
+                .ToList();
+                
+            // var listResult = _context.TodoLists.FromSqlRaw("select todo_lists.id, todo_lists.title, count(todo_tasks.done) from todo_tasks right join todo_lists on todo_tasks.todo_list_id=todo_lists.id where done=false or todo_tasks is Null group by todo_lists.id").OrderBy(l => l.Id).ToList();    
+            // List<TaskDTO> taskDTO = new List<TaskDTO>(); 
+            // foreach(var l in listResult)
+            // {
+            //     taskDTO.Add(new TaskDTO(){
+            //         id = l.Id,
+            //         title = l.Title,
+            //         countUndoneTasks = l.
+            //     });
+            // }
+            return new DashboardDTO(listResult, count);
         }
-        // private List<TodoList> todoLists = new List<TodoList> {
-        //     new TodoList() {Id = 1, Title = "First list"},
-        //     new TodoList() {Id = 2, Title = "Second list"}
-        // };
-        // private int lastIdTask = 0;
-        // private int lastIdList = 2;
-
-
-        // public List<TodoList> GetAllLists()
-        // {
-        //     return todoLists;
-        // }
-
-
-        // public TodoList GetListById(int id)
-        // {
-        //     return todoLists[id];
-        // }
-
-        // public List<TodoItem> GetAllTask(int listId)
-        // {
-        //     return todoLists[listId].List;
-        // }
-
-        // public TodoList CreateList(TodoList list)
-        // {
-        //     list.Id = ++lastIdList;
-        //     todoLists.Add(list);
-        //     return list;
-        // }
-
-        // public bool PutList(int id, TodoList list)
-        // {
-        //     foreach (var t in todoLists)
-        //     {
-        //         if (t.Id == id)
-        //         {
-        //             t.Title = list.Title;
-        //             t.List = list.List;
-        //             return true;
-        //         }
-        //     }
-        //     return false;
-        // }
-        // public bool PatchList(int id, TodoList list)
-        // {
-        //     foreach (var t in todoLists)
-        //     {
-        //         if (t.Id == id)
-        //         {
-        //             t.Title = list?.Title;
-        //             t.List = list?.List;
-        //             return true;
-        //         }
-        //     }
-        //     return false;
-        // }
-        // public bool DeleteTodoList(int id)
-        // {
-        //     try
-        //     {
-        //         todoLists.RemoveAt(id);
-        //         return true;
-        //     }
-        //     catch
-        //     {
-        //         return false;
-        //     }
-        // }
-
-        // public List<TodoItem> GetAllTaskInList(int listId)
-        // {
-        //     return todoLists[listId].List;
-        // }
-        // public TodoItem GetListById(int listId, int id)
-        // {
-        //     return todoLists[listId].List[id];
-        // }
-        // public TodoItem CreateTaskInList(int listId, TodoItem list)
-        // {
-        //     list.Id = ++lastIdTask;
-        //     todoLists[listId].List.Add(list);
-        //     return list;
-        // }
-        // public bool PutTaskInList(int listId, int id, TodoItem task)
-        // {
-        //     foreach (var t in todoLists[listId].List)
-        //     {
-        //         if (t.Id == id)
-        //         {
-        //             t.Title = task.Title;
-        //             t.Description = task.Description;
-        //             t.DueDate = task.DueDate;
-        //             t.Done = task.Done;
-        //             return true;
-        //         }
-        //     }
-        //     return false;
-
-        // }
-
-        // public bool PatchTaskInList(int listId, int id, TodoItem task)
-        // {
-        //     foreach (var t in todoLists[listId].List)
-        //     {
-        //         if (t.Id == id)
-        //         {
-        //             t.Title = task?.Title;
-        //             t.Description = task?.Description;
-        //             t.DueDate = task?.DueDate;
-        //             t.Done = task?.Done;
-        //             return true;
-        //         }
-        //     }
-        //     return false;
-        // }
-        // public bool DeleteTask(int listId, int id)
-        // {
-        //     try
-        //     {
-        //         todoLists[listId].List.RemoveAt(id);
-        //         return true;
-        //     }
-        //     catch
-        //     {
-        //         return false;
-        //     }
-        // }
     }
 }

@@ -6,25 +6,19 @@ namespace todo_rest_api
     public class DashboardDTO
     {
         public int todayTasks { get; set; }
-        public List<TaskDTO> doneList = new List<TaskDTO>();
+        public List<TaskDTO> unDoneList { get; set; }
 
-        public DashboardDTO()
+        public DashboardDTO(List<TaskDTO> unDoneList, int todayTasks)
         {
-            
+            this.todayTasks = todayTasks;
+            this.unDoneList = unDoneList;
         }
     }
 
     public class TaskDTO
     {
-        private int id { get; set; }
-        private string title { get; set; }
-        private int count { get; set; }
-
-        public TaskDTO(int id, string title, int count)
-        {
-            this.id = id;
-            this.title = title;
-            this.count = count;
-        }
+        public int id { get; set; }
+        public string title { get; set; }
+        public int countUndoneTasks { get; set; }
     }
 }
