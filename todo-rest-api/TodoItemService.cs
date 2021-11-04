@@ -68,7 +68,7 @@ namespace todo_rest_api
 
             var listResult = _context.TodoLists
                 .Include(l => l.TodoTasks)
-                .Select(l => new TaskDTO(){
+                .Select(l => new TaskDashboardDTO(){
                     id = l.Id,
                     title = l.Title,
                     countUndoneTasks = l.TodoTasks
@@ -89,6 +89,22 @@ namespace todo_rest_api
             //     });
             // }
             return new DashboardDTO(listResult, count);
+        }
+        public List<TaskCollectionDTO> TodayTask()
+        {
+            var collectionList = _context.TodoTasks
+                .Include(l => l.TodoList)
+                .Select(l => new TaskCollectionDTO(){
+                    id = l.Id,
+                    Title = l.Title,
+                    Description = l.Description,
+                    Duedate = l.Duedate,
+                    Done = l.Done,
+                    titleTodo = l.TodoList.Title
+                })
+                .Where(d => (DateTime.Today <= d.Duedate) && (d.Duedate < DateTime.Today.AddDays(1)))
+                .ToList();
+            return collectionList;
         }
     }
 }

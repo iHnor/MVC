@@ -13,7 +13,7 @@ namespace todo_rest_api
             this.todoItemsService = service;
         }
 
-        [HttpGet("/today")]
+        [HttpGet]
         public ActionResult<DashboardDTO> Dashboard()
         {
             
