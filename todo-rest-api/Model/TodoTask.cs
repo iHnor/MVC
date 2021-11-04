@@ -10,7 +10,7 @@ namespace todo_rest_api
         public DateTime Duedate { get; set; }
         public bool Done { get; set; }
 
-        public int ListId { get; set; }
+        public int TodoListId { get; set; }
         public TodoList TodoList { get; set; }
 
     }

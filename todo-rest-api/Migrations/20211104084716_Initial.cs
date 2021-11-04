@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace todo_rest_api.Migrations
 {
-    public partial class InitialSchema : Migration
+    public partial class Initial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -31,8 +31,7 @@ namespace todo_rest_api.Migrations
                     description = table.Column<string>(type: "text", nullable: true),
                     duedate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     done = table.Column<bool>(type: "boolean", nullable: false),
-                    list_id = table.Column<int>(type: "integer", nullable: false),
-                    todo_list_id = table.Column<int>(type: "integer", nullable: true)
+                    todo_list_id = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -42,7 +41,7 @@ namespace todo_rest_api.Migrations
                         column: x => x.todo_list_id,
                         principalTable: "todo_lists",
                         principalColumn: "id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(

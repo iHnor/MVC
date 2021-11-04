@@ -14,9 +14,10 @@ namespace todo_rest_api
         }
 
         [HttpGet("/today")]
-        public ActionResult TodayTasks()
+        public ActionResult<DashboardDTO> TodayTasks()
         {
             
+            return todoItemsService.Dashboard();
         }  
     }
 

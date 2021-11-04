@@ -1,6 +1,7 @@
 using System.Linq;
 using System.Collections.Generic;
-
+using System.Linq;
+using System;
 namespace todo_rest_api
 {
     public class TodoItemService
@@ -16,7 +17,7 @@ namespace todo_rest_api
             List<TodoTask> tasks = new List<TodoTask>();
             foreach (var task in _context.TodoTasks)
             {
-                if (task.ListId == listId)
+                if (task.TodoListId == listId)
                 {
                     tasks.Add(task);
                 }
@@ -39,9 +40,8 @@ namespace todo_rest_api
             }
         }
 
-        public void CreateTask(int listId, TodoTask task)
+        public void CreateTask(TodoTask task)
         {
-            task.ListId = listId;
             _context.TodoTasks.Add(task);
             _context.SaveChanges();
         }
@@ -57,6 +57,15 @@ namespace todo_rest_api
         public TodoTask GetTask(int id)
         {
             return _context.TodoTasks.Single(i => i.Id == id);
+        }
+
+        public DashboardDTO Dashboard()
+        {
+            DashboardDTO dashboard = new DashboardDTO();
+            dashboard.todayTasks = _context.TodoTasks
+                .Where(d => (DateTime.Today <= d.Duedate) && (d.Duedate < DateTime.Today.AddDays(1)))
+                .Count();
+            return  dashboard;
         }
         // private List<TodoList> todoLists = new List<TodoList> {
         //     new TodoList() {Id = 1, Title = "First list"},

@@ -57,15 +57,11 @@ namespace todo_rest_api.Migrations
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("duedate");
 
-                    b.Property<int>("ListId")
-                        .HasColumnType("integer")
-                        .HasColumnName("list_id");
-
                     b.Property<string>("Title")
                         .HasColumnType("text")
                         .HasColumnName("title");
 
-                    b.Property<int?>("TodoListId")
+                    b.Property<int>("TodoListId")
                         .HasColumnType("integer")
                         .HasColumnName("todo_list_id");
 
@@ -83,7 +79,9 @@ namespace todo_rest_api.Migrations
                     b.HasOne("todo_rest_api.TodoList", "TodoList")
                         .WithMany("TodoTasks")
                         .HasForeignKey("TodoListId")
-                        .HasConstraintName("fk_todo_tasks_todo_lists_todo_list_id");
+                        .HasConstraintName("fk_todo_tasks_todo_lists_todo_list_id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("TodoList");
                 });

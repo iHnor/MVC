@@ -14,9 +14,9 @@ namespace todo_rest_api
         }
 
         [HttpPost]
-        public IActionResult CreateTask(int listId, TodoTask task)
+        public IActionResult CreateTask(TodoTask task)
         {
-            todoItemsService.CreateTask(listId, task);
+            todoItemsService.CreateTask(task);
             return Ok();
         }
 
