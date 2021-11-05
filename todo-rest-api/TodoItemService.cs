@@ -68,7 +68,8 @@ namespace todo_rest_api
 
             var listResult = _context.TodoLists
                 .Include(l => l.TodoTasks)
-                .Select(l => new TaskDashboardDTO(){
+                .Select(l => new TaskDashboardDTO()
+                {
                     id = l.Id,
                     title = l.Title,
                     countUndoneTasks = l.TodoTasks
@@ -77,30 +78,29 @@ namespace todo_rest_api
                 })
                 .OrderBy(l => l.id)
                 .ToList();
-                
-            // var listResult = _context.TodoLists.FromSqlRaw("select todo_lists.id, todo_lists.title, count(todo_tasks.done) from todo_tasks right join todo_lists on todo_tasks.todo_list_id=todo_lists.id where done=false or todo_tasks is Null group by todo_lists.id").OrderBy(l => l.Id).ToList();    
-            // List<TaskDTO> taskDTO = new List<TaskDTO>(); 
-            // foreach(var l in listResult)
-            // {
-            //     taskDTO.Add(new TaskDTO(){
-            //         id = l.Id,
-            //         title = l.Title,
-            //         countUndoneTasks = l.
-            //     });
-            // }
             return new DashboardDTO(listResult, count);
         }
         public List<TaskCollectionDTO> TodayTask()
         {
             var collectionList = _context.TodoTasks
                 .Include(l => l.TodoList)
-                .Select(l => new TaskCollectionDTO(){
+                .Select(l => new TaskCollectionDTO()
+                {
                     id = l.Id,
                     Title = l.Title,
                     Description = l.Description,
                     Duedate = l.Duedate,
                     Done = l.Done,
-                    titleTodo = l.TodoList.Title
+                    //titleTodo = l.TodoList.Title
+                    // aboutList = new List<AboutList>
+                    // new AboutList(){
+                    //     id = l.TodoList.Id,
+                    //     title = l.TodoList.Title
+                    // }
+                    list = new AboutList(){
+                        id = l.TodoList.Id,
+                        title = l.TodoList.Title
+                    }
                 })
                 .Where(d => (DateTime.Today <= d.Duedate) && (d.Duedate < DateTime.Today.AddDays(1)))
                 .ToList();
