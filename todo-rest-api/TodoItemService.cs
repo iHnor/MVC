@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Npgsql;
 
 namespace todo_rest_api
 {
@@ -62,22 +63,45 @@ namespace todo_rest_api
 
         public DashboardDTO Dashboard()
         {
+            List<TaskDashboardDTO> listResult = new List<TaskDashboardDTO>();
+            
+            string sql = "SELECT todo_lists.Id, todo_lists.title, COUNT(todo_tasks.done) FROM todo_lists LEFT JOIN todo_tasks ON todo_tasks.todo_list_id = todo_lists.id WHERE todo_tasks IS Null OR todo_tasks.done = 'false' GROUP BY todo_lists.Id ORDER BY todo_lists.Id";
+            using var conn = new NpgsqlConnection(_context.Database.GetConnectionString());
+            conn.Open();
+            using (var cmd = new NpgsqlCommand(sql, conn))
+            {
+                using (var reader = cmd.ExecuteReader())
+                    while (reader.Read())
+                    {
+                        listResult.Add(new TaskDashboardDTO()
+                        {
+                            Id = reader.GetInt32(0),
+                            Title = reader.GetString(1),
+                            CountUndoneTasks = reader.GetInt32(2)
+                        });
+                    }
+
+            }
+            conn.Close();
+
             var count = _context.TodoTasks
                 .Where(d => (DateTime.Today <= d.Duedate) && (d.Duedate < DateTime.Today.AddDays(1)))
                 .Count();
 
-            var listResult = _context.TodoLists
-                .Include(l => l.TodoTasks)
-                .Select(l => new TaskDashboardDTO()
-                {
-                    id = l.Id,
-                    title = l.Title,
-                    countUndoneTasks = l.TodoTasks
-                        .Where(t => t.Done.Equals(false)).Count()
+            // var listResult = _context.TodoLists
+            //     .Include(l => l.TodoTasks)
+            //     .Select(l => new TaskDashboardDTO()
+            //     {
+            //         id = l.Id,
+            //         title = l.Title,
+            //         countUndoneTasks = l.TodoTasks
+            //             .Where(t => t.Done.Equals(false)).Count()
 
-                })
-                .OrderBy(l => l.id)
-                .ToList();
+            //     })
+            //     .OrderBy(l => l.id)
+            //     .ToList();
+            // return new DashboardDTO(listResult, count);
+
             return new DashboardDTO(listResult, count);
         }
         public List<TaskCollectionDTO> TodayTask()
@@ -91,13 +115,8 @@ namespace todo_rest_api
                     Description = l.Description,
                     Duedate = l.Duedate,
                     Done = l.Done,
-                    //titleTodo = l.TodoList.Title
-                    // aboutList = new List<AboutList>
-                    // new AboutList(){
-                    //     id = l.TodoList.Id,
-                    //     title = l.TodoList.Title
-                    // }
-                    list = new AboutList(){
+                    list = new AboutList()
+                    {
                         id = l.TodoList.Id,
                         title = l.TodoList.Title
                     }

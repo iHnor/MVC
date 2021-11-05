@@ -7,6 +7,10 @@ namespace todo_rest_api
     {
         public int todayTasks { get; set; }
         public List<TaskDashboardDTO> unDoneList { get; set; }
+        public DashboardDTO()
+        {
+            unDoneList = new List<TaskDashboardDTO>();
+        }
 
         public DashboardDTO(List<TaskDashboardDTO> unDoneList, int todayTasks)
         {
@@ -17,8 +21,8 @@ namespace todo_rest_api
 
     public class TaskDashboardDTO
     {
-        public int id { get; set; }
-        public string title { get; set; }
-        public int countUndoneTasks { get; set; }
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public int CountUndoneTasks { get; set; }
     }
 }
